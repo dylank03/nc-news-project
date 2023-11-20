@@ -1,3 +1,7 @@
 # Northcoders News API
 
-For instructions, please head over to [L2C NC News](https://l2c.northcoders.com/courses/be/nc-news).
+Before running this project locally, you will need to add two files, .env.test and .env.development in order to create the environment variables. 
+
+In each of these files you will need to add PGDATABASE=correct_database_name. 
+
+see db/setup.sql for the correct database names. 
