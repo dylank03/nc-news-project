@@ -1,12 +1,14 @@
 const express = require('express')
-const { getTopics } = require('./controllers/controller')
+const { getTopics, getAllEndpoints } = require('./controllers/controller')
+
 
 const app = express()
 
 app.get('/api/topics', getTopics)
 
+app.get('/api', getAllEndpoints)
+
 app.use((err, req, res, next) => {
-    console.log(err)
 });
 
 module.exports = app 
