@@ -4,6 +4,7 @@ const connection = require('../db/connection')
 const testData = require('../db/data/test-data')
 const seed = require('../db/seeds/seed')
 const endpointsObject = require('../endpoints.json')
+require('jest-sorted')
 
 afterAll(() => {
     return connection.end()
@@ -50,9 +51,10 @@ describe('endpoint GET /api/articles',()=>{
         .then(({body})=>{
             console.log(body)
             body.articles.forEach((article)=>{
-                expect(article).toEqual(expect.objectContaining({ article_id: expect.any(Number), title: expect.any(String), topic: expect.any(String), author: expect.any(String), body: expect.any(String), created_at: expect.any(String), votes: expect.any(Number), article_img_url: expect.any(String)}))
+                expect(article).toEqual(expect.objectContaining({ article_id: expect.any(Number), title: expect.any(String), topic: expect.any(String), author: expect.any(String), created_at: expect.any(String), votes: expect.any(Number), article_img_url: expect.any(String), comment_count: expect.any(String)}))
             })
             expect(body.articles.length).toBe(testData.articleData.length)
+            expect(body.articles).toBeSortedBy('created_at', {descending: true})
         })
     })
 })
