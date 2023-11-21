@@ -18,3 +18,14 @@ exports.selectArticleById = (articleId)=>{
     })
 }
 
+exports.selectCommentsByArticleId = (articleId)=>{
+    return db.query('SELECT * FROM comments WHERE article_id = $1', [articleId]).then(({rows})=>{
+        if (!rows.length) {
+            return Promise.reject({
+              status: 404,
+              msg: '404: Article not found',
+            });
+          }
+        return rows
+    })
+}
