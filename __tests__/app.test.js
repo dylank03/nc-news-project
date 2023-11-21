@@ -41,3 +41,18 @@ describe('endpoint GET /api',()=>{
         })
     })
 })
+
+describe('endpoint GET /api/articles',()=>{
+    test('receives 200 response and responds with all articles',()=>{
+        return request(app)
+        .get('/api/articles')
+        .expect(200)
+        .then(({body})=>{
+            console.log(body)
+            body.articles.forEach((article)=>{
+                expect(article).toEqual(expect.objectContaining({ article_id: expect.any(Number), title: expect.any(String), topic: expect.any(String), author: expect.any(String), body: expect.any(String), created_at: expect.any(String), votes: expect.any(Number), article_img_url: expect.any(String)}))
+            })
+            expect(body.articles.length).toBe(testData.articleData.length)
+        })
+    })
+})
