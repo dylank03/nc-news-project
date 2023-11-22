@@ -64,7 +64,6 @@ describe('endpoint GET /api/articles/:article_id',()=>{
         .get('/api/articles/2')
         .expect(200)
         .then(({body})=>{
-            console.log(body)
             expect(body.article).toEqual({article_id: 2, 
             title: "Sony Vaio; or, The Laptop", 
             topic: "mitch",
