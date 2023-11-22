@@ -58,6 +58,7 @@ describe('endpoint GET /api/articles',()=>{
         })
     })
 })
+
 describe('endpoint GET /api/articles/:article_id',()=>{
     test('receives 200 response and returns correct article',()=>{
         return request(app)
