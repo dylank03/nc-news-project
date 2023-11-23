@@ -37,6 +37,12 @@ exports.selectCommentsByArticleId = (articleId)=>{
 
 exports.insertNewComment = (articleId, newComment) =>{
     const {body, author} = newComment
+    if(!body || !author){
+        return Promise.reject({
+            status: 400,
+            msg: '400: missing required fields',
+          });
+    }
     return db.query('INSERT INTO comments (body, author, article_id) VALUES ($1, $2, $3) RETURNING *;', [body, author, articleId]).then(({rows})=>{
         return rows[0]
     })

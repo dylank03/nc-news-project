@@ -157,6 +157,22 @@ describe('endpoint POST /api/articles/:article_id/comments',()=>{
               })
         })
     })
+    test('receives 400 response for missing properties', ()=>{
+        return request(app)
+        .post('/api/articles/3/comments').send({})
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe('400: missing required fields')
+        })
+    })
+    test('receives 400 response for missing properties', ()=>{
+        return request(app)
+        .post('/api/articles/3/comments').send({body: "This is a new comment", incorrectKey: "username"})
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe('400: missing required fields')
+        })
+    })
     test('returns 400 for invalid id',()=>{
         return request(app)
         .post('/api/articles/notavalidID/comments')
