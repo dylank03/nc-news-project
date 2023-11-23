@@ -1,4 +1,5 @@
-const { selectTopics, selectArticleById, selectCommentsByArticleId } = require("../models/model")
+const { selectTopics, selectAllArticles, selectArticleById, selectCommentsByArticleId } = require("../models/model")
+
 const endpointsObject = require('../endpoints.json')
 const { checkExists } = require("../db/seeds/utils")
 
@@ -10,6 +11,12 @@ exports.getTopics = (req,res)=>{
 
 exports.getAllEndpoints = (req,res)=>{
     res.status(200).send({endpoints: endpointsObject})
+}
+
+exports.getAllArticles = (req, res)=>{
+    selectAllArticles().then((articles)=>{
+        res.status(200).send({articles})
+    })
 }
 
 exports.getArticleById = (req, res, next)=>{
