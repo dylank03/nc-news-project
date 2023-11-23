@@ -4,6 +4,7 @@ const connection = require('../db/connection')
 const testData = require('../db/data/test-data')
 const seed = require('../db/seeds/seed')
 const endpointsObject = require('../endpoints.json')
+require('jest-sorted')
 
 afterAll(() => {
     return connection.end()
@@ -83,24 +84,25 @@ describe('endpoint GET /api/articles/:article_id/comments',()=>{
         .get('/api/articles/3/comments')
         .expect(200)
         .then(({body})=>{
-            const date = new Date(1600560600000)
-            expect(body.comments).toEqual(  [{
-                comment_id: 10,
-                body: "git push origin master",
-                votes: 0,
-                author: "icellusedkars",
-                article_id: 3,
-                created_at: "2020-06-20T07:24:00.000Z",
-              },
-              {
+            expect(body.comments).toEqual(  [              {
                 comment_id: 11,
                 body: "Ambidextrous marsupial",
                 votes: 0,
                 author: "icellusedkars",
                 article_id: 3,
                 created_at: "2020-09-19T23:10:00.000Z",
-              }])
+              },{
+                comment_id: 10,
+                body: "git push origin master",
+                votes: 0,
+                author: "icellusedkars",
+                article_id: 3,
+                created_at: "2020-06-20T07:24:00.000Z",
+              }],
+)
+              expect(body.comments).toBeSortedBy('created_at', {descending: true})
         })
+    
     })
     test('returns 404 error for id that is not found', ()=>{
         return request(app)

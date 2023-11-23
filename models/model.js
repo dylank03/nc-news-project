@@ -20,7 +20,7 @@ exports.selectArticleById = (articleId)=>{
 }
 
 exports.selectCommentsByArticleId = (articleId)=>{
-    return db.query('SELECT * FROM comments WHERE article_id = $1', [articleId]).then(({rows})=>{
+    return db.query('SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at DESC', [articleId]).then(({rows})=>{
         return rows
     })
 }
