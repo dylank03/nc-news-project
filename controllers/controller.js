@@ -39,7 +39,6 @@ exports.getArticleComments = (req,res, next)=>{
 exports.postNewComment = (req,res, next)=>{
     const {article_id} = req.params
     const commentData = req.body
-    console.log(commentData)
     insertNewComment(article_id, commentData).then((newCommentsList)=>{
         res.status(201).send({comments: newCommentsList})
     }).catch(next)
