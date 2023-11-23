@@ -1,4 +1,4 @@
-const { selectTopics, selectAllArticles, selectArticleById, selectCommentsByArticleId, insertNewComment } = require("../models/model")
+const { selectTopics, selectAllArticles, selectArticleById, selectCommentsByArticleId, insertNewComment, deleteCommentById } = require("../models/model")
 
 const endpointsObject = require('../endpoints.json')
 const { checkExists } = require("../db/seeds/utils")
@@ -41,5 +41,12 @@ exports.postNewComment = (req,res, next)=>{
     const commentData = req.body
     insertNewComment(article_id, commentData).then((newCommentsList)=>{
         res.status(201).send({comments: newCommentsList})
+    }).catch(next)
+}
+
+exports.deleteComment = (req, res, next)=>{
+    const {comment_id} = req.params
+    deleteCommentById(comment_id).then((deletedComment)=>{
+        res.status(204).send({deletedComment})
     }).catch(next)
 }

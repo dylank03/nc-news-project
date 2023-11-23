@@ -164,3 +164,20 @@ describe('endpoint POST /api/articles/:article_id/comments',()=>{
     })
 })
 
+describe('endpoint DELETE /api/comments/:comment_id', ()=>{
+    test('receives 204 and responds with no content', ()=>{
+        return request(app)
+        .delete('/api/comments/6')
+        .expect(204).then(({body})=>{
+            expect(body).toEqual({})
+        })
+    })
+    test('receives 400 if given invalid ID', ()=>{
+        return request(app)
+        .delete('/api/comments/InvalidId')
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe('400: Invalid Input')
+        })
+    })
+})

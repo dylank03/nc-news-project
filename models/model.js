@@ -1,4 +1,5 @@
 const db = require("../db/connection")
+const { articleData } = require("../db/data/test-data")
 
 
 exports.selectTopics = ()=>{
@@ -38,6 +39,12 @@ exports.selectCommentsByArticleId = (articleId)=>{
 exports.insertNewComment = (articleId, newComment) =>{
     const {body, author} = newComment
     return db.query('INSERT INTO comments (body, author, article_id) VALUES ($1, $2, $3) RETURNING *;', [body, author, articleId]).then(({rows})=>{
+        return rows[0]
+    })
+}
+
+exports.deleteCommentById = (commentId)=>{
+    return db.query('DELETE FROM comments WHERE comment_id = $1 RETURNING *', [commentId]).then(({rows})=>{
         return rows[0]
     })
 }
