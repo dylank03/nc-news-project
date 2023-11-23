@@ -178,5 +178,10 @@ describe('endpoint POST /api/articles/:article_id/comments',()=>{
         .post('/api/articles/notavalidID/comments')
         .expect(400)
     })
+    test('returns 404 for article ID that does not exist', ()=>{
+        return request(app)
+        .post('/api/articles/99999/comments').send({body: "This is a new comment", author: "icellusedkars"})
+        .expect(404)
+    })
 })
 
