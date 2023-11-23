@@ -1,5 +1,6 @@
 const db = require("../db/connection")
 
+
 exports.selectTopics = ()=>{
     return db.query('SELECT * FROM topics').then(({rows})=>{
         return rows
@@ -28,3 +29,8 @@ exports.selectArticleById = (articleId)=>{
     })
 }
 
+exports.selectCommentsByArticleId = (articleId)=>{
+    return db.query('SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at DESC', [articleId]).then(({rows})=>{
+        return rows
+    })
+}

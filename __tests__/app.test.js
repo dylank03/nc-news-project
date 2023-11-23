@@ -93,3 +93,49 @@ describe('endpoint GET /api/articles/:article_id',()=>{
         })
     })
 })
+
+describe('endpoint GET /api/articles/:article_id/comments',()=>{
+    test('receives 200 response and commments for given article_id',()=>{
+        return request(app)
+        .get('/api/articles/3/comments')
+        .expect(200)
+        .then(({body})=>{
+            expect(body.comments).toEqual(  [              {
+                comment_id: 11,
+                body: "Ambidextrous marsupial",
+                votes: 0,
+                author: "icellusedkars",
+                article_id: 3,
+                created_at: "2020-09-19T23:10:00.000Z",
+              },{
+                comment_id: 10,
+                body: "git push origin master",
+                votes: 0,
+                author: "icellusedkars",
+                article_id: 3,
+                created_at: "2020-06-20T07:24:00.000Z",
+              }],
+)
+              expect(body.comments).toBeSortedBy('created_at', {descending: true})
+        })
+    
+    })
+    test('returns 404 error for id that is not found', ()=>{
+        return request(app)
+        .get('/api/articles/99999/comments')
+        .expect(404)
+    })
+    test('returns 400 for invalid id',()=>{
+        return request(app)
+        .get('/api/articles/notavalidID/comments')
+        .expect(400)
+    })
+    test('returns empty array for valid article with no comments associated',()=>{
+        return request(app)
+        .get('/api/articles/7/comments')
+        .expect(200)
+        .then(({body})=>{
+            expect(body.comments).toEqual([])
+        })
+    })
+})
