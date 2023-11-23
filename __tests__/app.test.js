@@ -93,3 +93,11 @@ describe('endpoint GET /api/articles/:article_id',()=>{
         })
     })
 })
+
+describe('endpoint GET /api/articles/:article_id/comments',()=>{
+    test('receives 200 response and endpoints json object',()=>{
+        return request(app)
+        .post('/api/articles/:article_id/comments').send({body: "This is a new comment", author: "newUser7769"})
+        .expect(201)
+    })
+})

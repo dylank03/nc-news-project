@@ -23,3 +23,7 @@ exports.getArticleById = (req, res, next)=>{
         res.status(200).send({article})
     }).catch(next)
 }
+
+exports.postNewComment = (req,res)=>{
+    
+}

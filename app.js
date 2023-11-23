@@ -12,6 +12,8 @@ app.get('/api/articles', getAllArticles)
 
 app.get('/api/articles/:article_id', getArticleById)
 
+//app.post('/api/articles/:article_id/comments', postNewComment)
+
 app.use((err, req, res, next) => {
     if (err.status) {
       res.status(err.status).send({ msg: err.msg });
