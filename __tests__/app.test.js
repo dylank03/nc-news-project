@@ -4,6 +4,7 @@ const connection = require('../db/connection')
 const testData = require('../db/data/test-data')
 const seed = require('../db/seeds/seed')
 const endpointsObject = require('../endpoints.json')
+const { convertTimestampToDate, formatComments } = require('../db/seeds/utils')
 require('jest-sorted')
 
 afterAll(() => {
@@ -100,7 +101,7 @@ describe('endpoint GET /api/articles/:article_id/comments',()=>{
         .get('/api/articles/3/comments')
         .expect(200)
         .then(({body})=>{
-            expect(body.comments).toEqual(  [              {
+            expect(body.comments).toEqual([{
                 comment_id: 11,
                 body: "Ambidextrous marsupial",
                 votes: 0,
@@ -114,7 +115,7 @@ describe('endpoint GET /api/articles/:article_id/comments',()=>{
                 author: "icellusedkars",
                 article_id: 3,
                 created_at: "2020-06-20T07:24:00.000Z",
-              }],
+              }]
 )
               expect(body.comments).toBeSortedBy('created_at', {descending: true})
         })
@@ -139,3 +140,27 @@ describe('endpoint GET /api/articles/:article_id/comments',()=>{
         })
     })
 })
+
+describe('endpoint POST /api/articles/:article_id/comments',()=>{
+    test('receives 201 response and returns the posted comment', ()=>{
+        return request(app)
+        .post('/api/articles/3/comments').send({body: "This is a new comment", author: "icellusedkars"})
+        .expect(201)
+        .then(({body})=>{
+            expect(body.comments).toEqual( {
+                comment_id: 19,
+                body: "This is a new comment",
+                votes: 0,
+                author: "icellusedkars",
+                article_id: 3,
+                created_at: expect.any(String)
+              })
+        })
+    })
+    test('returns 400 for invalid id',()=>{
+        return request(app)
+        .post('/api/articles/notavalidID/comments')
+        .expect(400)
+    })
+})
+
