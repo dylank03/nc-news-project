@@ -1,4 +1,4 @@
-const { selectTopics, selectAllArticles, selectArticleById, selectCommentsByArticleId, insertNewComment } = require("../models/model")
+const { selectTopics, selectAllArticles, selectArticleById, selectCommentsByArticleId, insertNewComment, updateArticleVotes } = require("../models/model")
 
 const endpointsObject = require('../endpoints.json')
 const { checkExists } = require("../db/seeds/utils")
@@ -41,5 +41,15 @@ exports.postNewComment = (req,res, next)=>{
     const commentData = req.body
     insertNewComment(article_id, commentData).then((newCommentsList)=>{
         res.status(201).send({comments: newCommentsList})
+    }).catch(next)
+}
+
+exports.patchArticleVotes = (req,res, next)=>{
+    const {inc_votes} = req.body
+    const {article_id} = req.params
+    console.log(inc_votes)
+    console.log(article_id)
+    updateArticleVotes(article_id, inc_votes).then((updatedArticle)=>{
+        res.status(200).send({article: updatedArticle})
     }).catch(next)
 }
