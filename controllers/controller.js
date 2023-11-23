@@ -47,8 +47,6 @@ exports.postNewComment = (req,res, next)=>{
 exports.patchArticleVotes = (req,res, next)=>{
     const {inc_votes} = req.body
     const {article_id} = req.params
-    console.log(inc_votes)
-    console.log(article_id)
     updateArticleVotes(article_id, inc_votes).then((updatedArticle)=>{
         res.status(200).send({article: updatedArticle})
     }).catch(next)
