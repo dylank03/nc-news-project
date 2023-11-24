@@ -26,9 +26,6 @@ exports.getAllArticles = (req, res, next)=>{
         const filteredArticles = resolvedPromises[0]
         res.status(200).send({articles: filteredArticles})
     }).catch(next)
-    // selectAllArticles(topic).then((articles)=>{
-    //     res.status(200).send({articles})
-    // }).catch(next)
 }
 
 exports.getArticleById = (req, res, next)=>{
