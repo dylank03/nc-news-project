@@ -80,5 +80,7 @@
       "article_id": 3,
      "created_at": "2020-06-20T07:24:00.000Z"
     }]
+  }, "GET /api/users": {
+    "description": "serves up a json representation of all of the users"
   }
 }

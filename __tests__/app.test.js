@@ -247,3 +247,14 @@ describe('endpoint DELETE /api/comments/:comment_id', ()=>{
         })
     })
 })
+
+describe('endpoint GET /api/users', ()=>{
+    test('receives 200 response and responds with array of all users', ()=>{
+        return request(app)
+        .get('/api/users')
+        .expect(200).then(({body})=>{
+            expect(body.users).toEqual(testData.userData)
+        })
+    })
+
+})
