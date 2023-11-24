@@ -199,4 +199,12 @@ describe('endpoint PATCH /api/articles/:article_id',()=>{
             expect(body.msg).toBe('400: Invalid Input')
         })
     })
+    test('returns 404 error for article ID that is not found', ()=>{
+        return request(app)
+        .patch('/api/articles/99999').send({inc_votes : 1})
+        .expect(404)
+        .then(({body})=>{
+            expect(body.msg).toBe('not found')
+        })
+    })
 })

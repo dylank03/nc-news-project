@@ -47,7 +47,10 @@ exports.postNewComment = (req,res, next)=>{
 exports.patchArticleVotes = (req,res, next)=>{
     const {inc_votes} = req.body
     const {article_id} = req.params
-    updateArticleVotes(article_id, inc_votes).then((updatedArticle)=>{
+    articlePromises = [updateArticleVotes(article_id, inc_votes)]
+    articlePromises.push(checkExists("articles", "article_id", article_id))
+    return Promise.all(articlePromises).then((resolvedPromises)=>{
+        const updatedArticle = resolvedPromises[0]
         res.status(200).send({article: updatedArticle})
     }).catch(next)
 }
