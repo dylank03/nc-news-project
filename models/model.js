@@ -10,7 +10,7 @@ exports.selectTopics = ()=>{
 
 exports.selectAllArticles = (topicQuery)=>{
     const queryValues = []
-    let queryString = `SELECT articles.article_id, articles.article_img_url, articles.author, articles.created_at, articles.title, articles.topic, articles.votes, COUNT(articles.article_id) AS comment_count
+    let queryString = `SELECT articles.article_id, articles.article_img_url, articles.author, articles.created_at, articles.title, articles.topic, articles.votes, COUNT(comments.article_id) AS comment_count
     FROM articles
     LEFT JOIN comments ON comments.article_id = articles.article_id
      `
@@ -26,7 +26,10 @@ exports.selectAllArticles = (topicQuery)=>{
     })
 }
 exports.selectArticleById = (articleId)=>{
-    return db.query('SELECT * FROM articles WHERE article_id = $1', [articleId]).then(({rows})=>{
+    return db.query(`SELECT articles.*, COUNT(comments.article_id) AS comment_count FROM articles 
+                    LEFT JOIN comments ON comments.article_id = articles.article_id
+                    WHERE articles.article_id = $1
+                    GROUP BY articles.article_id`, [articleId]).then(({rows})=>{
         if (!rows.length) {
             return Promise.reject({
               status: 404,
