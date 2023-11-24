@@ -74,7 +74,6 @@ exports.deleteCommentById = (commentId)=>{
 
 exports.selectAllUsers = ()=>{
     return db.query('SELECT * FROM users').then(({rows})=>{
-        console.log(rows)
         return rows
     })
 }
