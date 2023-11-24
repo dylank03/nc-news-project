@@ -14,10 +14,21 @@ exports.getAllEndpoints = (req,res)=>{
     res.status(200).send({endpoints: endpointsObject})
 }
 
-exports.getAllArticles = (req, res)=>{
-    selectAllArticles().then((articles)=>{
-        res.status(200).send({articles})
-    })
+exports.getAllArticles = (req, res, next)=>{
+    const {topic} = req.query
+    const articlePromises = [selectAllArticles(topic)]
+
+    if(topic){
+        articlePromises.push(checkExists("topics", "slug", topic))
+    }
+
+    Promise.all(articlePromises).then((resolvedPromises)=>{
+        const filteredArticles = resolvedPromises[0]
+        res.status(200).send({articles: filteredArticles})
+    }).catch(next)
+    // selectAllArticles(topic).then((articles)=>{
+    //     res.status(200).send({articles})
+    // }).catch(next)
 }
 
 exports.getArticleById = (req, res, next)=>{
