@@ -1,7 +1,8 @@
-const { selectTopics, selectAllArticles, selectArticleById, selectCommentsByArticleId, insertNewComment, updateArticleVotes, deleteCommentById } = require("../models/model")
+const { selectTopics, selectAllArticles, selectArticleById, selectCommentsByArticleId, insertNewComment, updateArticleVotes, deleteCommentById, selectAllUsers } = require("../models/model")
 
 const endpointsObject = require('../endpoints.json')
 const { checkExists } = require("../db/seeds/utils")
+
 
 exports.getTopics = (req,res)=>{
     selectTopics().then((topics)=>{
@@ -63,4 +64,10 @@ exports.deleteComment = (req, res, next)=>{
         const deletedComment = resolvedPromises[0]
         res.status(204).send()
     }).catch(next)
+}
+
+exports.getAllUsers = (req, res)=>{
+    selectAllUsers().then((users)=>{
+        res.status(200).send({users})
+    })
 }
