@@ -61,7 +61,7 @@ describe('endpoint GET /api/articles',()=>{
 })
 
 describe('endpoint GET /api/articles/:article_id',()=>{
-    test('receives 200 response and returns correct article',()=>{
+    test('receives 200 response and returns correct article with comment count',()=>{
         return request(app)
         .get('/api/articles/2')
         .expect(200)
@@ -74,7 +74,25 @@ describe('endpoint GET /api/articles/:article_id',()=>{
             created_at: "2020-10-16T05:03:00.000Z",
             article_img_url:
               "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
-            votes: 0 })
+            votes: 0, comment_count: "0" })
+        })
+    })
+    test('receives 200 response and returns correct article with comment count',()=>{
+        return request(app)
+        .get('/api/articles/1')
+        .expect(200)
+        .then(({body})=>{
+                expect(body.article).toEqual( {
+                    article_id: 1,
+                    title: "Living in the shadow of a great man",
+                    topic: "mitch",
+                    author: "butter_bridge",
+                    body: "I find this existence challenging",
+                    created_at: expect.any(String),
+                    votes: 100,
+                    article_img_url:
+                      "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700", comment_count: "11"
+                  })
         })
     })
     test('receives 400 response for a bad user ID and responds with an error message', () => {
@@ -282,7 +300,6 @@ describe('endpoint GET /api/articles (topic query)', ()=>{
         .get('/api/articles?topic=mitch')
         .expect(200)
         .then(({body})=>{
-            console.log(body)
             body.articles.forEach((article)=>{
                 expect(article).toMatchObject({article_id: expect.any(Number), article_img_url: expect.any(String), author: expect.any(String), created_at: expect.any(String), title: expect.any(String), topic: 'mitch', votes: expect.any(Number), comment_count: expect.any(String)})
             })
