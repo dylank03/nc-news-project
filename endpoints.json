@@ -58,6 +58,10 @@
       "article_id": 3,
      "created_at": "2020-06-20T07:24:00.000Z"
     }]
+  },"DELETE '/api/comments/:comment_id'":{
+    "description": "Deletes comment for given comment ID and returns 204 status code with no content",
+    "queries": [],
+    "exampleResponse": {}
   },"PATCH /api/articles/:article_id":{
     "description": "updates the number of votes for given article ID and returns the article with the new number of votes",
     "queries": [],
