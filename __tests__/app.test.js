@@ -147,7 +147,7 @@ describe('endpoint POST /api/articles/:article_id/comments',()=>{
         .post('/api/articles/3/comments').send({body: "This is a new comment", author: "icellusedkars"})
         .expect(201)
         .then(({body})=>{
-            expect(body.comments).toEqual( {
+            expect(body.comment).toEqual( {
                 comment_id: 19,
                 body: "This is a new comment",
                 votes: 0,
@@ -162,5 +162,17 @@ describe('endpoint POST /api/articles/:article_id/comments',()=>{
         .post('/api/articles/notavalidID/comments')
         .expect(400)
     })
+    test('receives 400 response for missing properties', ()=>{
+        return request(app)
+        .post('/api/articles/3/comments').send({})
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe('400: missing required fields')
+        })
+    })
+    test('returns 404 for article ID that does not exist', ()=>{
+        return request(app)
+        .post('/api/articles/99999/comments').send({body: "This is a new comment", author: "icellusedkars"})
+        .expect(404)
+    })
 })
-
