@@ -264,7 +264,7 @@ describe('endpoint GET /api/articles (topic query)', ()=>{
         .get('/api/articles?topic=cats')
         .expect(200)
         .then(({body})=>{
-            expect(body.articles).toEqual( [{
+            expect(body.articles).toMatchObject( [{
                 article_id:5,
                 title: "UNCOVERED: catspiracy to bring down democracy",
                 topic: "cats",
@@ -274,7 +274,18 @@ describe('endpoint GET /api/articles (topic query)', ()=>{
                 votes: 0,
                 article_img_url:
                   "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
-              }])
+              }])  
+        })
+    })
+    test('receives 200 response and responds with articles filtered by the topic value specified in the query', ()=>{
+        return request(app)
+        .get('/api/articles?topic=mitch')
+        .expect(200)
+        .then(({body})=>{
+            console.log(body)
+            body.articles.forEach((article)=>{
+                expect(article).toMatchObject({article_id: expect.any(Number), article_img_url: expect.any(String), author: expect.any(String), created_at: expect.any(String), title: expect.any(String), topic: 'mitch', votes: expect.any(Number), comment_count: expect.any(String)})
+            })
         })
     })
     test('receives 404 for a topic that does not exist', ()=>{
