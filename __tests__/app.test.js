@@ -180,4 +180,12 @@ describe('endpoint DELETE /api/comments/:comment_id', ()=>{
             expect(body.msg).toBe('400: Invalid Input')
         })
     })
+    test('receives 404 if given comment ID that does not exist', ()=>{
+        return request(app)
+        .delete('/api/comments/9999999')
+        .expect(404)
+        .then(({body})=>{
+            expect(body.msg).toBe('not found')
+        })
+    })
 })
