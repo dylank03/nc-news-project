@@ -1,4 +1,5 @@
 const db = require("../db/connection")
+const { checkExists } = require("../db/seeds/utils")
 
 
 exports.selectTopics = ()=>{
@@ -37,10 +38,21 @@ exports.selectCommentsByArticleId = (articleId)=>{
 
 exports.insertNewComment = (articleId, newComment) =>{
     const {body, author} = newComment
-    return db.query('INSERT INTO comments (body, author, article_id) VALUES ($1, $2, $3) RETURNING *;', [body, author, articleId]).then(({rows})=>{
-        return rows[0]
-    })
+    if(!body || !author){
+        return Promise.reject({
+            status: 400,
+            msg: '400: missing required fields',
+          });
+    }
+    else if(articleId){
+        return checkExists("articles", "article_id", articleId).then(()=>{
+            return db.query('INSERT INTO comments (body, author, article_id) VALUES ($1, $2, $3) RETURNING *;', [body, author, articleId]).then(({rows})=>{
+                return rows[0]
+            })
+        })
+    }
 }
+
 
 exports.updateArticleVotes = (articleId, newVoteCount) =>{
     if(!newVoteCount){
@@ -53,3 +65,4 @@ exports.updateArticleVotes = (articleId, newVoteCount) =>{
         return rows[0]
     })
 }
+
