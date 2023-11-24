@@ -39,7 +39,7 @@ exports.getArticleComments = (req,res, next)=>{
 exports.postNewComment = (req,res, next)=>{
     const {article_id} = req.params
     const commentData = req.body
-        insertNewComment(article_id, commentData).then((newCommentsList)=>{
-            res.status(201).send({comments: newCommentsList})
+        insertNewComment(article_id, commentData).then((newComment)=>{
+            res.status(201).send({comment: newComment})
     }).catch(next)
 }

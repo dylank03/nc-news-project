@@ -47,7 +47,6 @@ exports.insertNewComment = (articleId, newComment) =>{
     else if(articleId){
         return checkExists("articles", "article_id", articleId).then(()=>{
             return db.query('INSERT INTO comments (body, author, article_id) VALUES ($1, $2, $3) RETURNING *;', [body, author, articleId]).then(({rows})=>{
-                console.log(rows)
                 return rows[0]
             })
         })
