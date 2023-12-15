@@ -303,6 +303,7 @@ describe('endpoint GET /api/articles (topic query)', ()=>{
             body.articles.forEach((article)=>{
                 expect(article).toMatchObject({article_id: expect.any(Number), article_img_url: expect.any(String), author: expect.any(String), created_at: expect.any(String), title: expect.any(String), topic: 'mitch', votes: expect.any(Number), comment_count: expect.any(String)})
             })
+            expect(body.articles.length).toBeGreaterThan(0)
         })
     })
     test('receives 404 for a topic that does not exist', ()=>{

@@ -21,7 +21,7 @@ exports.getAllArticles = (req, res, next)=>{
     if(topic){
         articlePromises.push(checkExists("topics", "slug", topic))
     }
-
+    
     return Promise.all(articlePromises).then((resolvedPromises)=>{
         const filteredArticles = resolvedPromises[0]
         res.status(200).send({articles: filteredArticles})

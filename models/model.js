@@ -13,18 +13,19 @@ exports.selectAllArticles = (topicQuery)=>{
     let queryString = `SELECT articles.article_id, articles.article_img_url, articles.author, articles.created_at, articles.title, articles.topic, articles.votes, COUNT(comments.article_id) AS comment_count
     FROM articles
     LEFT JOIN comments ON comments.article_id = articles.article_id
-     `
+    `
 
     if(topicQuery){
         queryValues.push(topicQuery)
         queryString += ` WHERE topic = $1`
     }
-
-    return db.query(queryString + `GROUP BY articles.article_id
-    ORDER BY articles.created_at DESC`, queryValues).then(({rows})=>{
-        return rows
-    })
+        return db.query(queryString + `GROUP BY articles.article_id
+        ORDER BY articles.created_at DESC`, queryValues).then(({rows})=>{
+            return rows
+        })
 }
+
+
 exports.selectArticleById = (articleId)=>{
     return db.query(`SELECT articles.*, COUNT(comments.article_id) AS comment_count FROM articles 
                     LEFT JOIN comments ON comments.article_id = articles.article_id
