@@ -12,7 +12,7 @@ exports.selectAllArticles = (topicQuery)=>{
     const queryValues = []
     let queryString = `SELECT articles.article_id, articles.article_img_url, articles.author, articles.created_at, articles.title, articles.topic, articles.votes, COUNT(comments.article_id) AS comment_count
     FROM articles
-    LEFT JOIN comments ON comments.article_id = articles.article_id
+    LEFT JOIN comments ON articles.article_id = comments.article_id
     `
 
     if(topicQuery){

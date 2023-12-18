@@ -18,13 +18,12 @@ exports.getAllArticles = (req, res, next)=>{
     const {topic} = req.query
     const articlePromises = [selectAllArticles(topic)]
 
-    // if(topic){
-    //     articlePromises.push(checkExists("topics", "slug", topic))
-    // }
+    if(topic){
+        articlePromises.push(checkExists("topics", "slug", topic))
+    }
     
     Promise.all(articlePromises).then((resolvedPromises)=>{
         const filteredArticles = resolvedPromises[0]
-        console.log(filteredArticles)
         res.status(200).send({articles: filteredArticles})
     }).catch(next)
 }
