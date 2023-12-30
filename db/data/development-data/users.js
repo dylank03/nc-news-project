@@ -3,36 +3,36 @@ module.exports = [
     username: 'tickle122',
     name: 'Tom Tickle',
     avatar_url:
-      'https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953'
+      'https://imgv3.fotor.com/images/blog-richtext-image/10-profile-picture-ideas-to-make-you-stand-out.jpg'
   },
   {
     username: 'grumpy19',
     name: 'Paul Grump',
     avatar_url:
-      'https://vignette.wikia.nocookie.net/mrmen/images/7/78/Mr-Grumpy-3A.PNG/revision/latest?cb=20170707233013'
+      'https://wallpapers.com/images/hd/cool-profile-picture-1ecoo30f26bkr14o.jpg'
   },
   {
     username: 'happyamy2016',
     name: 'Amy Happy',
     avatar_url:
-      'https://vignette1.wikia.nocookie.net/mrmen/images/7/7f/Mr_Happy.jpg/revision/latest?cb=20140102171729'
+      'https://i.pinimg.com/736x/80/0f/9e/800f9e172d57b198f420340dd0cec84f.jpg'
   },
   {
     username: 'cooljmessy',
     name: 'Peter Messy',
     avatar_url:
-      'https://vignette.wikia.nocookie.net/mrmen/images/1/1a/MR_MESSY_4A.jpg/revision/latest/scale-to-width-down/250?cb=20170730171002'
+      'https://png.pngtree.com/thumb_back/fh260/background/20230612/pngtree-man-wearing-glasses-is-wearing-colorful-background-image_2905240.jpg'
   },
   {
     username: 'weegembump',
     name: 'Gemma Bump',
     avatar_url:
-      'https://vignette.wikia.nocookie.net/mrmen/images/7/7e/MrMen-Bump.png/revision/latest?cb=20180123225553'
+      'https://w0.peakpx.com/wallpaper/660/478/HD-wallpaper-pride-and-joy-profile-colorful-black-art-rainbow-fantasy-phill314-girl-luminos.jpg'
   },
   {
     username: 'jessjelly',
     name: 'Jess Jelly',
     avatar_url:
-      'https://vignette.wikia.nocookie.net/mrmen/images/4/4f/MR_JELLY_4A.jpg/revision/latest?cb=20180104121141'
+      'https://i.pinimg.com/originals/0f/1c/61/0f1c61094b05ca30c6e75fd8ff1444a6.jpg'
   }
 ];
