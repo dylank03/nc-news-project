@@ -1,12 +1,4 @@
 const db = require("../db/connection")
-const { checkExists } = require("../db/seeds/utils")
-
-
-exports.selectTopics = ()=>{
-    return db.query('SELECT * FROM topics').then(({rows})=>{
-        return rows
-    })
-}
 
 exports.selectAllArticles = (topicQuery)=>{
     const queryValues = []
@@ -14,7 +6,6 @@ exports.selectAllArticles = (topicQuery)=>{
     FROM articles
     LEFT JOIN comments ON comments.article_id = articles.article_id
     `
-
     if(topicQuery){
         queryValues.push(topicQuery)
         queryString += ` WHERE topic = $1`
@@ -41,30 +32,6 @@ exports.selectArticleById = (articleId)=>{
     })
 }
 
-exports.selectCommentsByArticleId = (articleId)=>{
-    return db.query('SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at DESC', [articleId]).then(({rows})=>{
-        return rows
-    })
-}
-
-exports.insertNewComment = (articleId, newComment) =>{
-    const {body, author} = newComment
-    if(!body || !author){
-        return Promise.reject({
-            status: 400,
-            msg: '400: missing required fields',
-          });
-    }
-    else if(articleId){
-        return checkExists("articles", "article_id", articleId).then(()=>{
-            return db.query('INSERT INTO comments (body, author, article_id) VALUES ($1, $2, $3) RETURNING *;', [body, author, articleId]).then(({rows})=>{
-                return rows[0]
-            })
-        })
-    }
-}
-
-
 exports.updateArticleVotes = (articleId, newVoteCount) =>{
     if(!newVoteCount){
         return Promise.reject({
@@ -77,14 +44,5 @@ exports.updateArticleVotes = (articleId, newVoteCount) =>{
     })
 }
 
-exports.deleteCommentById = (commentId)=>{
-    return db.query('DELETE FROM comments WHERE comment_id = $1 RETURNING *', [commentId]).then(({rows})=>{
-        return rows[0]
-    })
-}
 
-exports.selectAllUsers = ()=>{
-    return db.query('SELECT * FROM users').then(({rows})=>{
-        return rows
-    })
-}
+

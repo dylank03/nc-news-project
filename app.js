@@ -1,5 +1,10 @@
 const express = require('express')
-const { getTopics, getAllEndpoints, getAllArticles , getArticleById, getArticleComments, postNewComment, patchArticleVotes, deleteComment, getAllUsers} = require('./controllers/controller')
+const {getAllArticles , getArticleById, patchArticleVotes} = require('./controllers/articlesController')
+const {getTopics} = require('./controllers/topicsController')
+const {getArticleComments, postNewComment, deleteComment} = require('./controllers/commentsController')
+const {getAllUsers} = require('./controllers/usersController')
+const {getAllEndpoints} = require('./controllers/endpointsController')
+
 const cors = require ('cors');
 
 const app = express()

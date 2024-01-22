@@ -282,6 +282,7 @@ describe('endpoint GET /api/articles (topic query)', ()=>{
         .get('/api/articles?topic=cats')
         .expect(200)
         .then(({body})=>{
+            
             expect(body.articles).toMatchObject( [{
                 article_id:5,
                 title: "UNCOVERED: catspiracy to bring down democracy",
