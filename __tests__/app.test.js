@@ -51,7 +51,7 @@ describe('endpoint GET /api/articles',()=>{
         .expect(200)
         .then(({body})=>{
             body.articles.forEach((article)=>{
-                expect(article).toEqual(expect.objectContaining({ article_id: expect.any(Number), title: expect.any(String), topic: expect.any(String), author: expect.any(String), created_at: expect.any(String), votes: expect.any(Number), article_img_url: expect.any(String), comment_count: expect.any(String)}))
+                expect(article).toEqual(expect.objectContaining({ article_id: expect.any(Number), title: expect.any(String), topic: expect.any(String), author: expect.any(String), created_at: expect.any(String), votes: expect.any(Number), article_img_url: expect.any(String), comment_count: expect.any(Number)}))
                 expect(article.body).toBe(undefined)
             })
             expect(body.articles.length).toBe(testData.articleData.length)
@@ -288,7 +288,7 @@ describe('endpoint GET /api/articles (topic query)', ()=>{
                 title: "UNCOVERED: catspiracy to bring down democracy",
                 topic: "cats",
                 author: "rogersop",
-                comment_count: "2",
+                comment_count: 2,
                 created_at: expect.any(String),
                 votes: 0,
                 article_img_url:
@@ -302,7 +302,7 @@ describe('endpoint GET /api/articles (topic query)', ()=>{
         .expect(200)
         .then(({body})=>{
             body.articles.forEach((article)=>{
-                expect(article).toMatchObject({article_id: expect.any(Number), article_img_url: expect.any(String), author: expect.any(String), created_at: expect.any(String), title: expect.any(String), topic: 'mitch', votes: expect.any(Number), comment_count: expect.any(String)})
+                expect(article).toMatchObject({article_id: expect.any(Number), article_img_url: expect.any(String), author: expect.any(String), created_at: expect.any(String), title: expect.any(String), topic: 'mitch', votes: expect.any(Number), comment_count: expect.any(Number)})
             })
             expect(body.articles.length).toBeGreaterThan(0)
         })
