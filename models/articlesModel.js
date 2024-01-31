@@ -9,16 +9,12 @@ exports.selectAllArticles = (topicQuery)=>{
     if(topicQuery){
         queryValues.push(topicQuery)
         queryString += ` WHERE articles.topic = $1`
-        return db.query(queryString + `GROUP BY articles.article_id
-        ORDER BY articles.created_at DESC`, queryValues).then(({rows})=>{
-        return rows
-    })
     }
-    else{
+    
     return db.query(queryString + `GROUP BY articles.article_id
     ORDER BY articles.created_at DESC`, queryValues).then(({rows})=>{
         return rows
-    })}
+    })
 }
 
 
