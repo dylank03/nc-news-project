@@ -1,7 +1,9 @@
 const db = require("../db/connection")
 
-exports.selectAllArticles = (topicQuery)=>{
+exports.selectAllArticles = (topicQuery, sortByQuery = 'created_at', orderByQuery = 'DESC')=>{
     const queryValues = []
+    const validSortQueries = ['title', 'topic', 'author', 'body', 'created_at', 'votes']
+    const validOrderQueries = ['ASC', 'DESC']
     let queryString = `SELECT articles.article_id, articles.article_img_url, articles.author, articles.created_at, articles.title, articles.topic, articles.votes, CAST(COUNT(comments.article_id) AS INT) AS comment_count
     FROM articles
     LEFT JOIN comments ON comments.article_id = articles.article_id
@@ -11,8 +13,16 @@ exports.selectAllArticles = (topicQuery)=>{
         queryString += ` WHERE articles.topic = $1`
     }
     
+    if(!validSortQueries.includes(sortByQuery.toLowerCase())){
+        return Promise.reject({status:400, msg: 'Bad Request'})
+    }
+
+    if(!validOrderQueries.includes(orderByQuery.toUpperCase())){
+        return Promise.reject({status:400, msg: 'Bad Request'})
+    }
+
     return db.query(queryString + `GROUP BY articles.article_id
-    ORDER BY articles.created_at DESC`, queryValues).then(({rows})=>{
+    ORDER BY articles.${sortByQuery.toLowerCase()} ${orderByQuery.toUpperCase()}`, queryValues).then(({rows})=>{
         return rows
     })
 }

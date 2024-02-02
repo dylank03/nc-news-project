@@ -324,3 +324,71 @@ describe('endpoint GET /api/articles (topic query)', ()=>{
         })
     })
 })
+
+describe('endpoint GET /api/articles (sort query)', ()=>{
+    test('receives 200 response and responds with articles sorted by sort value given in query', ()=>{
+        return request(app)
+        .get('/api/articles?sort_by=votes')
+        .expect(200)
+        .then(({body})=>{
+            expect(body.articles).toBeSortedBy('votes', {descending:true})
+        })
+    })
+    test('receives 200 response and responds with articles sorted by sort value given in query', ()=>{
+        return request(app)
+        .get('/api/articles?sort_by=author')
+        .expect(200)
+        .then(({body})=>{
+            expect(body.articles).toBeSortedBy('author', {descending:true})
+        })
+    })
+    test('receives 200 response and responds with articles sorted by sort value given in query', ()=>{
+        return request(app)
+        .get('/api/articles?sort_by=title')
+        .expect(200)
+        .then(({body})=>{
+            expect(body.articles).toBeSortedBy('title', {descending:true})
+        })
+    })
+    test('receives 200 response and responds with articles ordered by order value given in query', ()=>{
+        return request(app)
+        .get('/api/articles?sort_by=votes&order_by=asc')
+        .expect(200)
+        .then(({body})=>{
+            expect(body.articles).toBeSortedBy('votes', {ascending:true})
+        })
+    })
+    test('receives 200 response and responds with articles ordered by order value given in query', ()=>{
+        return request(app)
+        .get('/api/articles?sort_by=author&order_by=asc')
+        .expect(200)
+        .then(({body})=>{
+            expect(body.articles).toBeSortedBy('author', {ascending:true})
+        })
+    })
+    test('receives 200 response and responds with articles ordered by order value given in query', ()=>{
+        return request(app)
+        .get('/api/articles?sort_by=title&order_by=asc')
+        .expect(200)
+        .then(({body})=>{
+            expect(body.articles).toBeSortedBy('title', {ascending:true})
+        })
+    })
+    test('Invalid sort query returns 400 error with bad request message', ()=>{
+        return request(app)
+        .get('/api/articles?sort_by=something')
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe('Bad Request')
+        })
+    })
+    test('invalid order query returns 400 error with bad request message', ()=>{
+        return request(app)
+        .get('/api/articles?order_by=whatever', ()=>{
+            expect(400)
+            .then(({body})=>{
+                expect(body.msg).toBe('Bad Request')
+            })
+        })
+    })
+})

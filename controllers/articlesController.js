@@ -3,8 +3,8 @@ const {selectAllArticles, selectArticleById, selectCommentsByArticleId, updateAr
 const { checkExists } = require("../db/seeds/utils")
 
 exports.getAllArticles = (req, res, next)=>{
-    const {topic} = req.query
-    const articlePromises = [selectAllArticles(topic)]
+    const {topic, sort_by, order_by} = req.query
+    const articlePromises = [selectAllArticles(topic, sort_by, order_by)]
 
     if(topic){
         articlePromises.push(checkExists("topics", "slug", topic))
