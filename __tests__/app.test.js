@@ -392,3 +392,26 @@ describe('endpoint GET /api/articles (sort query)', ()=>{
         })
     })
 })
+
+describe('endpoint GET /api/users/:username', ()=>{
+    test('receives 200 response and responds with correct user object for username', ()=>{
+        return request(app)
+        .get('/api/users/icellusedkars')
+        .expect(200)
+        .then(({body})=>{
+            expect(body.user).toEqual({
+                username: 'icellusedkars',
+                name: 'sam',
+                avatar_url: 'https://avatars2.githubusercontent.com/u/24604688?s=460&v=4'
+              })
+        })
+    })
+    test('receives 404 and responds with not found for invalid username', ()=>{
+        return request(app)
+        .get('/api/users/noname')
+        .expect(404)
+        .then(({body})=>{
+            expect(body.msg).toBe('not found')
+        })
+    } )
+})

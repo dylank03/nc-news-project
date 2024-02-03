@@ -18,7 +18,6 @@ app.use('/api', apiRouter)
 app.use('/api/topics', topicsRouter)
 app.use('/api/users', userRouter)
 
-
 app.use((err, req, res, next) => {
     if (err.status) {
       res.status(err.status).send({ msg: err.msg });
