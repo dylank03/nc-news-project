@@ -282,7 +282,6 @@ describe('endpoint GET /api/articles (topic query)', ()=>{
         .get('/api/articles?topic=cats')
         .expect(200)
         .then(({body})=>{
-            
             expect(body.articles).toMatchObject( [{
                 article_id:5,
                 title: "UNCOVERED: catspiracy to bring down democracy",
@@ -414,4 +413,46 @@ describe('endpoint GET /api/users/:username', ()=>{
             expect(body.msg).toBe('not found')
         })
     } )
+})
+
+describe('endpoint PATCH api/comments/:comment_id', ()=>{
+    test('receives 200 response and updates votes for given comment ID', ()=>{
+        return request(app)
+        .patch('/api/comments/4').send({inc_votes: 10})
+        .expect(200)
+        .then(({body})=>{
+            expect(body.comment).toMatchObject(  {
+                body: " I carry a log — yes. Is it funny to you? It is not to me.",
+                votes: -90,
+                author: "icellusedkars",
+                article_id: 1,
+                comment_id:4,
+                created_at: expect.any(String)
+              })
+        })
+    })
+    test('receives 400 for invalid request', ()=>{
+        return request(app)
+        .patch('/api/comments/invalidId').send({inc_votes:7})
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe('400: Invalid Input')
+        })
+    })
+    test('receives 404 if commentId does not exist', ()=>{
+        return request(app)
+        .patch('/api/comments/999999').send({inc_votes: 8})
+        .expect(404)
+        .then(({body})=>{
+            expect(body.msg).toBe('not found')
+        })
+    })
+    test('receives 400 if there is no request body' , ()=>{
+        return request(app)
+        .patch('/api/comments/9')
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe('400: Invalid Input')
+        })
+    })
 })
