@@ -29,7 +29,7 @@ exports.selectAllArticles = (topicQuery, sortByQuery = 'created_at', orderByQuer
 
 
 exports.selectArticleById = (articleId)=>{
-    return db.query(`SELECT articles.*, COUNT(comments.article_id) AS comment_count FROM articles 
+    return db.query(`SELECT articles.*, CAST(COUNT(comments.article_id) AS INT) AS comment_count FROM articles 
                     LEFT JOIN comments ON comments.article_id = articles.article_id
                     WHERE articles.article_id = $1
                     GROUP BY articles.article_id`, [articleId]).then(({rows})=>{
@@ -55,5 +55,26 @@ exports.updateArticleVotes = (articleId, newVoteCount) =>{
     })
 }
 
+exports.insertNewArticle = (newArticle) =>{
+    const {body, author, title, topic} = newArticle
+    const article_img_url = newArticle.article_img_url || "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+    if(!body || !author || !title || !topic){
+        return Promise.reject({
+            status: 400,
+            msg: '400: missing required fields',
+          });
+    }
+    else{
+        return db.query('INSERT INTO articles (body, author, title, topic, article_img_url) VALUES ($1, $2, $3, $4, $5) RETURNING *;', [body, author, title, topic, article_img_url]).then(({rows})=>{
+            const articleId = rows[0].article_id
+            return db.query(`SELECT articles.*, CAST(COUNT(comments.article_id) AS INT) AS comment_count FROM articles 
+                    LEFT JOIN comments ON comments.article_id = articles.article_id
+                    WHERE articles.article_id = $1
+                    GROUP BY articles.article_id`, [articleId]).then(({rows})=>{
+                        return rows[0]
+                    })
+        })
+    }
+}
 
 
