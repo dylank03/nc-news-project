@@ -74,7 +74,7 @@ describe('endpoint GET /api/articles/:article_id',()=>{
             created_at: "2020-10-16T05:03:00.000Z",
             article_img_url:
               "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
-            votes: 0, comment_count: "0" })
+            votes: 0, comment_count: 0 })
         })
     })
     test('receives 200 response and returns correct article with comment count',()=>{
@@ -91,7 +91,7 @@ describe('endpoint GET /api/articles/:article_id',()=>{
                     created_at: expect.any(String),
                     votes: 100,
                     article_img_url:
-                      "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700", comment_count: "11"
+                      "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700", comment_count: 11
                   })
         })
     })
@@ -453,6 +453,33 @@ describe('endpoint PATCH api/comments/:comment_id', ()=>{
         .expect(400)
         .then(({body})=>{
             expect(body.msg).toBe('400: Invalid Input')
+        })
+    })
+})
+
+describe('endpoint POST /api/articles', ()=>{
+    test('receives 200 and responds with posted article', ()=>{
+        return request(app)
+        .post('/api/articles').send({author: 'icellusedkars', title: 'New Article', body: 'This is a new article', topic: 'cats', article_img_url: "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"})
+        .expect(201)
+        .then(({body})=>{
+            expect(body.article).toMatchObject({author: 'icellusedkars', title: 'New Article', body: 'This is a new article', topic: 'cats', article_id: expect.any(Number), votes:0, created_at: expect.any(String), comment_count:0, article_img_url: "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"})
+        })
+    })
+    test('receives 200 and responds with posted article with default image when no image url is given', ()=>{
+        return request(app)
+        .post('/api/articles').send({author: 'icellusedkars', title: 'New Article', body: 'This is a new article', topic: 'cats',})
+        .expect(201)
+        .then(({body})=>{
+            expect(body.article).toMatchObject({author: 'icellusedkars', title: 'New Article', body: 'This is a new article', topic: 'cats', article_id: expect.any(Number), votes:0, created_at: expect.any(String), comment_count:0, article_img_url: "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"})
+        })
+    })
+    test('receives 400 when given invalid request body', ()=>{
+        return request(app)
+        .post('/api/articles').send({author: 'icellusedkars', body: 'This is a new article', topic: 'cats',})
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe('400: missing required fields')
         })
     })
 })
