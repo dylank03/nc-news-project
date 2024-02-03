@@ -29,3 +29,15 @@ exports.deleteCommentById = (commentId)=>{
         return rows[0]
     })
 }
+
+exports.updateCommentVotes = (commentId, newVoteCount)=>{
+    if(!newVoteCount){
+        return Promise.reject({
+            status: 400,
+            msg: '400: Invalid Input',
+        });
+    }
+    return db.query('UPDATE comments SET votes = votes + $1 WHERE comment_id = $2 RETURNING *;', [newVoteCount, commentId]).then(({rows})=>{
+        return rows[0]
+    })
+}
