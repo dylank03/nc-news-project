@@ -3,8 +3,8 @@ const {selectAllArticles, selectArticleById, updateArticleVotes, insertNewArticl
 const { checkExists } = require("../db/seeds/utils")
 
 exports.getAllArticles = (req, res, next)=>{
-    const {topic, sort_by, order_by, limit, p} = req.query
-    const articlePromises = [selectAllArticles(topic, sort_by, order_by, limit, p)]
+    const {category, sort_by, order_by, limit, p} = req.query
+    const articlePromises = [selectAllArticles(category, sort_by, order_by, limit, p)]
     
     Promise.all(articlePromises).then((resolvedPromises)=>{
         const filteredArticles = resolvedPromises[0][0]
