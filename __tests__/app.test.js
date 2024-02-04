@@ -279,7 +279,7 @@ describe('endpoint GET /api/users', ()=>{
 describe('endpoint GET /api/articles (topic query)', ()=>{
     test('receives 200 response and responds with articles filtered by the topic value specified in the query', ()=>{
         return request(app)
-        .get('/api/articles?category=cats')
+        .get('/api/articles?topic=cats')
         .expect(200)
         .then(({body})=>{
             expect(body.articles).toMatchObject( [{
@@ -297,7 +297,7 @@ describe('endpoint GET /api/articles (topic query)', ()=>{
     })
     test('receives 200 response and responds with articles filtered by the topic value specified in the query', ()=>{
         return request(app)
-        .get('/api/articles?category=mitch')
+        .get('/api/articles?topic=mitch')
         .expect(200)
         .then(({body})=>{
             body.articles.forEach((article)=>{
@@ -316,7 +316,7 @@ describe('endpoint GET /api/articles (topic query)', ()=>{
     // })
     test('receives 200 for a topic that does exist but has no articles associated', ()=>{
         return request(app)
-        .get('/api/articles?category=paper')
+        .get('/api/articles?topic=paper')
         .expect(200)
         .then(({body})=>{
             expect(body.articles).toEqual([])
