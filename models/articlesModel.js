@@ -22,12 +22,19 @@ exports.selectAllArticles = (topicQuery, sortByQuery = 'created_at', orderByQuer
     }
 
     queryValues.push(limit)
-    
 
-    return db.query(queryString + `GROUP BY articles.article_id
+    const queryPromise = []
+
+    queryPromise.push(db.query(queryString + `GROUP BY articles.article_id
     ORDER BY articles.${sortByQuery.toLowerCase()} ${orderByQuery.toUpperCase()} LIMIT ${topicQuery ? '$2' : '$1'} OFFSET ${p*limit - limit}`, queryValues).then(({rows})=>{
         return rows
-    })
+    }))
+    queryPromise.push(db.query('SELECT COUNT(articles) FROM articles').then(({rows})=>{
+        return rows[0].count
+    }))
+
+    return Promise.all(queryPromise)
+
 }
 
 
