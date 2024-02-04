@@ -29,8 +29,6 @@ exports.selectAllArticles = (topicQuery, sortByQuery = 'created_at', orderByQuer
     queryValues.push(limit)
     const fullQueryString = queryString + endQueryString
 
-    console.log(fullQueryString)
-
     queryPromise.push(db.query(fullQueryString, queryValues).then(({rows})=>{
         return rows
     }))
