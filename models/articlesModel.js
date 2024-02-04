@@ -8,11 +8,15 @@ exports.selectAllArticles = (topicQuery, sortByQuery = 'created_at', orderByQuer
     FROM articles
     LEFT JOIN comments ON comments.article_id = articles.article_id
     `
+    let endQueryString = `GROUP BY articles.article_id
+    ORDER BY articles.${sortByQuery.toLowerCase()} ${orderByQuery.toUpperCase()} LIMIT ${topicQuery ? '$2' : '$1'} OFFSET ${p*limit - limit}`
+
     if(topicQuery){
         queryValues.push(topicQuery)
         queryString += `WHERE articles.topic = $1`
     }
-    
+
+
     if(!validSortQueries.includes(sortByQuery.toLowerCase()) || /\D/.test(p)){
         return Promise.reject({status:400, msg: 'Bad Request'})
     }
@@ -21,14 +25,12 @@ exports.selectAllArticles = (topicQuery, sortByQuery = 'created_at', orderByQuer
         return Promise.reject({status:400, msg: 'Bad Request'})
     }
 
-    console.log(queryString)
-
-    queryValues.push(limit)
-
     const queryPromise = []
 
-    queryPromise.push(db.query(queryString + `GROUP BY articles.article_id
-    ORDER BY articles.${sortByQuery.toLowerCase()} ${orderByQuery.toUpperCase()} LIMIT ${topicQuery ? '$2' : '$1'} OFFSET ${p*limit - limit}`, queryValues).then(({rows})=>{
+    queryValues.push(limit)
+    const fullQueryString = queryString + endQueryString
+
+    queryPromise.push(db.query(fullQueryString, queryValues).then(({rows})=>{
         return rows
     }))
     queryPromise.push(db.query('SELECT COUNT(articles) FROM articles').then(({rows})=>{
