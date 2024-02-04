@@ -13,9 +13,8 @@ exports.selectAllArticles = (topicQuery, sortByQuery = 'created_at', orderByQuer
 
     if(topicQuery){
         queryValues.push(topicQuery)
-        queryString += `WHERE articles.topic = $1`
+        queryString += `WHERE articles.topic = $1 `
     }
-
 
     if(!validSortQueries.includes(sortByQuery.toLowerCase()) || /\D/.test(p)){
         return Promise.reject({status:400, msg: 'Bad Request'})
@@ -29,6 +28,8 @@ exports.selectAllArticles = (topicQuery, sortByQuery = 'created_at', orderByQuer
 
     queryValues.push(limit)
     const fullQueryString = queryString + endQueryString
+
+    console.log(fullQueryString)
 
     queryPromise.push(db.query(fullQueryString, queryValues).then(({rows})=>{
         return rows
