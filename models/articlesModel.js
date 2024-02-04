@@ -10,7 +10,7 @@ exports.selectAllArticles = (topicQuery, sortByQuery = 'created_at', orderByQuer
     `
     if(topicQuery){
         queryValues.push(topicQuery)
-        queryString += ` WHERE articles.topic = $1`
+        queryString += `WHERE articles.topic = $1`
     }
     
     if(!validSortQueries.includes(sortByQuery.toLowerCase()) || /\D/.test(p)){
@@ -20,6 +20,8 @@ exports.selectAllArticles = (topicQuery, sortByQuery = 'created_at', orderByQuer
     if(!validOrderQueries.includes(orderByQuery.toUpperCase()) || /\D/.test(limit)){
         return Promise.reject({status:400, msg: 'Bad Request'})
     }
+
+    console.log(queryString)
 
     queryValues.push(limit)
 
