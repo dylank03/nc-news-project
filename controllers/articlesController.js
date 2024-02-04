@@ -11,8 +11,8 @@ exports.getAllArticles = (req, res, next)=>{
     }
     
     Promise.all(articlePromises).then((resolvedPromises)=>{
-        const filteredArticles = resolvedPromises[0]
-        res.status(200).send({articles: filteredArticles})
+        const filteredArticles = resolvedPromises[0][0]
+        res.status(200).send({articles: filteredArticles, article_count: resolvedPromises[0][1]})
     }).catch(next)
 }
 

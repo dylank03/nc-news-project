@@ -508,6 +508,7 @@ describe('endpoint GET /api/articles (pagination)', ()=>{
                 expect(article.body).toBe(undefined)
             })
             expect(body.articles[0].created_at).toBe('2020-08-03T13:14:00.000Z')
+            expect(body.article_count).toBe('13')
             expect(body.articles.length).toBe(5)
             expect(body.articles).toBeSortedBy('created_at', {descending: true})
         })
