@@ -54,7 +54,7 @@ describe('endpoint GET /api/articles',()=>{
                 expect(article).toEqual(expect.objectContaining({ article_id: expect.any(Number), title: expect.any(String), topic: expect.any(String), author: expect.any(String), created_at: expect.any(String), votes: expect.any(Number), article_img_url: expect.any(String), comment_count: expect.any(Number)}))
                 expect(article.body).toBe(undefined)
             })
-            expect(body.articles.length).toBe(testData.articleData.length)
+            expect(body.articles.length).toBe(10)
             expect(body.articles).toBeSortedBy('created_at', {descending: true})
         })
     })
@@ -458,7 +458,7 @@ describe('endpoint PATCH api/comments/:comment_id', ()=>{
 })
 
 describe('endpoint POST /api/articles', ()=>{
-    test('receives 200 and responds with posted article', ()=>{
+    test('receives 200 status code and responds with posted article', ()=>{
         return request(app)
         .post('/api/articles').send({author: 'icellusedkars', title: 'New Article', body: 'This is a new article', topic: 'cats', article_img_url: "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"})
         .expect(201)
@@ -480,6 +480,52 @@ describe('endpoint POST /api/articles', ()=>{
         .expect(400)
         .then(({body})=>{
             expect(body.msg).toBe('400: missing required fields')
+        })
+    })
+})
+
+describe('endpoint GET /api/articles (pagination)', ()=>{
+    test('receives 200 status code and responds with first 5 articles orderd by date', ()=>{
+        return request(app)
+        .get('/api/articles?p=1&limit=5')
+        .expect(200)
+        .then(({body})=>{
+            body.articles.forEach((article)=>{
+                expect(article).toEqual(expect.objectContaining({ article_id: expect.any(Number), title: expect.any(String), topic: expect.any(String), author: expect.any(String), created_at: expect.any(String), votes: expect.any(Number), article_img_url: expect.any(String), comment_count: expect.any(Number)}))
+                expect(article.body).toBe(undefined)
+            })
+            expect(body.articles.length).toBe(5)
+            expect(body.articles).toBeSortedBy('created_at', {descending: true})
+        })
+    })
+    test('receives 200 status code and responds with next 5 articles ordered by date', ()=>{
+        return request(app)
+        .get('/api/articles?p=2&limit=5')
+        .expect(200)
+        .then(({body})=>{
+            body.articles.forEach((article)=>{
+                expect(article).toEqual(expect.objectContaining({ article_id: expect.any(Number), title: expect.any(String), topic: expect.any(String), author: expect.any(String), created_at: expect.any(String), votes: expect.any(Number), article_img_url: expect.any(String), comment_count: expect.any(Number)}))
+                expect(article.body).toBe(undefined)
+            })
+            expect(body.articles[0].created_at).toBe('2020-08-03T13:14:00.000Z')
+            expect(body.articles.length).toBe(5)
+            expect(body.articles).toBeSortedBy('created_at', {descending: true})
+        })
+    })
+    test('receives 400 status code for bad request', ()=>{
+        return request(app)
+        .get('/api/articles?p=2&limit=dropdatabase')
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe('Bad Request')
+        })
+    })
+    test('receives 400 status code for bad request', ()=>{
+        return request(app)
+        .get('/api/articles?p=hahahaha&limit=6')
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe('Bad Request')
         })
     })
 })

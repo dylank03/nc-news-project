@@ -3,8 +3,8 @@ const {selectAllArticles, selectArticleById, updateArticleVotes, insertNewArticl
 const { checkExists } = require("../db/seeds/utils")
 
 exports.getAllArticles = (req, res, next)=>{
-    const {topic, sort_by, order_by} = req.query
-    const articlePromises = [selectAllArticles(topic, sort_by, order_by)]
+    const {topic, sort_by, order_by, limit, p} = req.query
+    const articlePromises = [selectAllArticles(topic, sort_by, order_by, limit, p)]
 
     if(topic){
         articlePromises.push(checkExists("topics", "slug", topic))
@@ -37,7 +37,6 @@ exports.patchArticleVotes = (req,res, next)=>{
 exports.postNewArticle = (req,res, next)=>{
     const articleData = req.body
     insertNewArticle(articleData).then((newArticle)=>{
-        console.log(newArticle)
         res.status(201).send({article: newArticle})
     }).catch(next)
 }

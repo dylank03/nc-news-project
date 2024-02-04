@@ -1,6 +1,6 @@
 const db = require("../db/connection")
 
-exports.selectAllArticles = (topicQuery, sortByQuery = 'created_at', orderByQuery = 'DESC')=>{
+exports.selectAllArticles = (topicQuery, sortByQuery = 'created_at', orderByQuery = 'DESC', limit = '10', p = '1')=>{
     const queryValues = []
     const validSortQueries = ['title', 'topic', 'author', 'body', 'created_at', 'votes']
     const validOrderQueries = ['ASC', 'DESC']
@@ -13,16 +13,19 @@ exports.selectAllArticles = (topicQuery, sortByQuery = 'created_at', orderByQuer
         queryString += ` WHERE articles.topic = $1`
     }
     
-    if(!validSortQueries.includes(sortByQuery.toLowerCase())){
+    if(!validSortQueries.includes(sortByQuery.toLowerCase()) || /\D/.test(p)){
         return Promise.reject({status:400, msg: 'Bad Request'})
     }
 
-    if(!validOrderQueries.includes(orderByQuery.toUpperCase())){
+    if(!validOrderQueries.includes(orderByQuery.toUpperCase()) || /\D/.test(limit)){
         return Promise.reject({status:400, msg: 'Bad Request'})
     }
+
+    queryValues.push(limit)
+    
 
     return db.query(queryString + `GROUP BY articles.article_id
-    ORDER BY articles.${sortByQuery.toLowerCase()} ${orderByQuery.toUpperCase()}`, queryValues).then(({rows})=>{
+    ORDER BY articles.${sortByQuery.toLowerCase()} ${orderByQuery.toUpperCase()} LIMIT ${topicQuery ? '$2' : '$1'} OFFSET ${p*limit - limit}`, queryValues).then(({rows})=>{
         return rows
     })
 }
