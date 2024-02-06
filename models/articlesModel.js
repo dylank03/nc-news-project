@@ -32,7 +32,7 @@ exports.selectAllArticles = (topicQuery, sortByQuery = 'created_at', orderByQuer
     queryPromise.push(db.query(fullQueryString, queryValues).then(({rows})=>{
         return rows
     }))
-    queryPromise.push(db.query('SELECT COUNT(articles) FROM articles').then(({rows})=>{
+    queryPromise.push(db.query(`SELECT COUNT(articles) FROM articles`).then(({rows})=>{
         return rows[0].count
     }))
 
