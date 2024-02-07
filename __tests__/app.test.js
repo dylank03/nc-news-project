@@ -530,3 +530,60 @@ describe('endpoint GET /api/articles (pagination)', ()=>{
         })
     })
 })
+
+describe('endpoint GET /api/articles/:article_id/comments (pagination)',()=>{
+    test('receives 200 response and 1 commment for given article_id',()=>{
+        return request(app)
+        .get('/api/articles/3/comments?p=1&limit=1')
+        .expect(200)
+        .then(({body})=>{
+            expect(body.comments).toEqual([{
+                comment_id: 11,
+                body: "Ambidextrous marsupial",
+                votes: 0,
+                author: "icellusedkars",
+                article_id: 3,
+                created_at: "2020-09-19T23:10:00.000Z",
+              }])
+        })
+    })
+    test('receives 200 response and returns second page for given article comments', ()=>{
+        return request(app)
+        .get('/api/articles/3/comments?p=2&limit=1')
+        .expect(200)
+        .then(({body})=>{
+            expect(body.comments).toEqual([{
+                comment_id: 10,
+                body: "git push origin master",
+                votes: 0,
+                author: "icellusedkars",
+                article_id: 3,
+                created_at: "2020-06-20T07:24:00.000Z",
+              }])
+        })
+    })
+    test('receives 400 status code for bad request', ()=>{
+        return request(app)
+        .get('/api/articles/2/comments?p=2&limit=dropdatabase')
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe('Bad Request')
+        })
+    })
+    test('receives 400 status code for bad request', ()=>{
+        return request(app)
+        .get('/api/articles/2/comments?p=hahahaha&limit=6')
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe('Bad Request')
+        })
+    })
+    test('returns comment count of total comments for given article', ()=>{
+        return request(app)
+        .get('/api/articles/1/comments?p=1&limit=5')
+        .expect(200)
+        .then(({body})=>{
+            expect(body.commentCount).toBe(11)
+        })
+    })
+})
