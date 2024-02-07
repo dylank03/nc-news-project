@@ -1,10 +1,23 @@
 const { checkExists } = require("../db/seeds/utils")
 const db = require("../db/connection")
 
-exports.selectCommentsByArticleId = (articleId)=>{
-    return db.query('SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at DESC', [articleId]).then(({rows})=>{
+exports.selectCommentsByArticleId = (articleId, limit = 10, p = 1)=>{
+
+    if(/\D/.test(p) || /\D/.test(limit)){
+        return Promise.reject({status:400, msg: 'Bad Request'})
+    }
+
+    const queryPromise = []
+
+    queryPromise.push(db.query(`SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at DESC LIMIT ${limit} OFFSET ${p*limit - limit}`, [articleId]).then(({rows})=>{
         return rows
-    })
+    }))
+
+    queryPromise.push(db.query(`SELECT CAST(COUNT(comments) AS INT) FROM comments WHERE article_id = $1`, [articleId]).then(({rows})=>{
+        return rows[0].count
+    }))
+
+    return Promise.all(queryPromise)
 }
 
 exports.insertNewComment = (articleId, newComment) =>{

@@ -3,12 +3,12 @@ const { checkExists } = require("../db/seeds/utils");
 
 exports.getArticleComments = (req,res, next)=>{
     const {article_id} = req.params
+    const {limit, p} = req.query
     checkExists("articles", "article_id", article_id).then(() => {
-        selectCommentsByArticleId(article_id).then((comments)=>{
-            res.status(200).send({ comments });
-        }) 
-    })
-    .catch(next);
+        selectCommentsByArticleId(article_id, limit, p).then((comments)=>{
+            res.status(200).send({ comments: comments[0], commentCount: comments[1] });
+        }).catch(next) 
+    }).catch(next)
 }
 
 exports.postNewComment = (req,res, next)=>{
