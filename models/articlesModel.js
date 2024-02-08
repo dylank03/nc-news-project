@@ -90,4 +90,10 @@ exports.insertNewArticle = (newArticle) =>{
     }
 }
 
-
+exports.deleteArticleById = (articleId)=>{
+    return db.query(`DELETE FROM comments WHERE article_id = $1 RETURNING *`, [articleId]).then(()=>{
+        return db.query('DELETE FROM articles WHERE article_id = $1 RETURNING *;', [articleId]).then(({rows})=>{
+            return rows[0]
+        })
+    })
+}

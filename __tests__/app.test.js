@@ -622,3 +622,29 @@ describe('endpoint POST /api/topics',()=>{
         })
     })
 })
+
+describe('endpoint DELETE /api/articles/:article_id', ()=>{
+    test('receives 204 and responds with no content', ()=>{
+        return request(app)
+        .delete('/api/articles/1')
+        .expect(204).then(({body})=>{
+            expect(body).toEqual({})
+        })
+    })
+    test('receives 400 if given invalid ID', ()=>{
+        return request(app)
+        .delete('/api/articles/InvalidId')
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe('400: Invalid Input')
+        })
+    })
+    test('receives 404 if given comment ID that does not exist', ()=>{
+        return request(app)
+        .delete('/api/articles/9999999')
+        .expect(404)
+        .then(({body})=>{
+            expect(body.msg).toBe('not found')
+        })
+    })
+})
