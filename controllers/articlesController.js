@@ -1,4 +1,4 @@
-const {selectAllArticles, selectArticleById, updateArticleVotes, insertNewArticle } = require("../models/articlesModel")
+const {selectAllArticles, selectArticleById, updateArticleVotes, insertNewArticle, deleteArticleById } = require("../models/articlesModel")
 
 const { checkExists } = require("../db/seeds/utils")
 
@@ -39,5 +39,14 @@ exports.postNewArticle = (req,res, next)=>{
     const articleData = req.body
     insertNewArticle(articleData).then((newArticle)=>{
         res.status(201).send({article: newArticle})
+    }).catch(next)
+}
+
+exports.deleteArticle = (req, res, next)=>{
+    const {article_id} = req.params
+    return checkExists("articles", "article_id", article_id).then(()=>{
+        return deleteArticleById(article_id)
+    }).then(()=>{
+        res.status(204).send()
     }).catch(next)
 }
