@@ -587,3 +587,38 @@ describe('endpoint GET /api/articles/:article_id/comments (pagination)',()=>{
         })
     })
 })
+
+describe('endpoint POST /api/topics',()=>{
+    test('receives 201 response and returns posted topic',()=>{
+        return request(app)
+        .post('/api/topics').send({'slug': 'newTopic', 'description': 'this is a new topic'})
+        .expect(201)
+        .then(({body})=>{
+            expect(body.topic).toEqual({'slug': expect.any(String), 'description': expect.any(String)})
+        })
+    })
+    test('receives 400 response for invalid request body',()=>{
+        return request(app)
+        .post('/api/topics').send({'description': 'this is a new topic'})
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe('400: missing required fields')
+        })
+    })
+    test('receives 400 response for invalid response body',()=>{
+        return request(app)
+        .post('/api/topics').send({'slug': 'newTopic'})
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe('400: missing required fields')
+        })
+    })
+    test('receives 400 response for invalid response body',()=>{
+        return request(app)
+        .post('/api/topics').send()
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe('400: missing required fields')
+        })
+    })
+})
