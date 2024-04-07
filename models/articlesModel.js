@@ -2,6 +2,7 @@ const db = require("../db/connection")
 
 exports.selectAllArticles = (topicQuery, sortByQuery = 'created_at', orderByQuery = 'DESC', limit = '10', p = '1')=>{
     const queryValues = []
+    const secondQueryValue = []
     const validSortQueries = ['title', 'topic', 'author', 'body', 'created_at', 'votes']
     const validOrderQueries = ['ASC', 'DESC']
     let queryString = `SELECT articles.article_id, articles.article_img_url, articles.author, articles.created_at, articles.title, articles.topic, articles.votes, CAST(COUNT(comments.article_id) AS INT) AS comment_count
@@ -13,6 +14,7 @@ exports.selectAllArticles = (topicQuery, sortByQuery = 'created_at', orderByQuer
 
     if(topicQuery){
         queryValues.push(topicQuery)
+        secondQueryValue.push(topicQuery)
         queryString += `WHERE articles.topic = $1 `
     }
 
@@ -32,7 +34,7 @@ exports.selectAllArticles = (topicQuery, sortByQuery = 'created_at', orderByQuer
     queryPromise.push(db.query(fullQueryString, queryValues).then(({rows})=>{
         return rows
     }))
-    queryPromise.push(db.query(`SELECT COUNT(articles) FROM articles`).then(({rows})=>{
+    queryPromise.push(db.query(`SELECT COUNT(articles) FROM articles ${topicQuery? 'WHERE topic = $1' : ''}`, secondQueryValue).then(({rows})=>{
         return rows[0].count
     }))
 
