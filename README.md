@@ -1,6 +1,6 @@
 # Northcoders News API
 
-##
+This is the back end for my NC news project hosted at https://nc-news-newsboard.netlify.app/
 
 Before running this project locally, you will need to add two files, .env.test and .env.development in order to create the environment variables. 
 
