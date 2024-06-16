@@ -9,7 +9,7 @@ exports.selectCommentsByArticleId = (articleId, limit = 10, p = 1)=>{
 
     const queryPromise = []
 
-    queryPromise.push(db.query(`SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at DESC LIMIT ${limit} OFFSET ${p*limit - limit}`, [articleId]).then(({rows})=>{
+    queryPromise.push(db.query(`SELECT comments.*, users.avatar_url FROM comments JOIN users on comments.author = users.username WHERE article_id = $1 ORDER BY created_at DESC LIMIT ${limit} OFFSET ${p*limit - limit}`, [articleId]).then(({rows})=>{
         return rows
     }))
 

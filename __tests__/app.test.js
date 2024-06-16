@@ -124,6 +124,7 @@ describe('endpoint GET /api/articles/:article_id/comments',()=>{
                 body: "Ambidextrous marsupial",
                 votes: 0,
                 author: "icellusedkars",
+                "avatar_url": "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4",
                 article_id: 3,
                 created_at: "2020-09-19T23:10:00.000Z",
               },{
@@ -131,6 +132,7 @@ describe('endpoint GET /api/articles/:article_id/comments',()=>{
                 body: "git push origin master",
                 votes: 0,
                 author: "icellusedkars",
+                "avatar_url": "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4",
                 article_id: 3,
                 created_at: "2020-06-20T07:24:00.000Z",
               }]
@@ -542,6 +544,7 @@ describe('endpoint GET /api/articles/:article_id/comments (pagination)',()=>{
                 body: "Ambidextrous marsupial",
                 votes: 0,
                 author: "icellusedkars",
+                "avatar_url": "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4",
                 article_id: 3,
                 created_at: "2020-09-19T23:10:00.000Z",
               }])
@@ -557,6 +560,7 @@ describe('endpoint GET /api/articles/:article_id/comments (pagination)',()=>{
                 body: "git push origin master",
                 votes: 0,
                 author: "icellusedkars",
+                "avatar_url": "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4",
                 article_id: 3,
                 created_at: "2020-06-20T07:24:00.000Z",
               }])
